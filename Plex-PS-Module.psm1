@@ -114,8 +114,8 @@ function Get-PlexTVServerList
 	$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $cred.GetNetworkCredential().UserName, $cred.GetNetworkCredential().Password)))
 	$headers = @{ }
 	$headers.Add("Authorization", "Basic $($base64AuthInfo)") | out-null
-	$headers.Add("X-Plex-Client-Identifier", "TESTSCRIPTV1") | Out-Null
-	$headers.Add("X-Plex-Product", "Test script") | Out-Null
+	$headers.Add("X-Plex-Client-Identifier", "Plex-PS-Module") | Out-Null
+	$headers.Add("X-Plex-Product", "Plex-PS-Module") | Out-Null
 	$headers.Add("X-Plex-Version", "V1") | Out-Null
 	[xml]$res = Invoke-RestMethod -Headers $headers -Method GET -Uri $url
 	$Servers = $res.MediaContainer.Server | select name, localAddresses, port
@@ -188,7 +188,7 @@ function Get-PlexSectionKey
 	$SelectedSection.key
 }
 
-function Get-PlexLibrarieSections ($hostname, $Token)
+function Get-PlexLibrarySections ($hostname, $Token)
 {
 	$URI = "http://$hostname/library/sections?X-Plex-Token=$Token"
 	$Invoke = Invoke-WebRequest -Uri $URI
@@ -205,7 +205,7 @@ function Get-PlexOnDeck ($hostname, $Token)
 }
 
 
-<#function Get-PlexUpdateLibrary ($hostname, $Token, $Section) 
+function Get-PlexUpdateLibrary ($hostname, $Token, $Section) 
 {
     $URI = "http://$hostname/library/sections/$Section/refresh?X-Plex-Token=$Token"
     Invoke-WebRequest -Uri $URI
@@ -216,7 +216,7 @@ function Get-PlexRefreshEntireLibrary ($hostname, $Token, $Section)
     $URI = "http://$hostname/library/sections/$Section/refresh?force=1&X-Plex-Token=$Token"
     Invoke-WebRequest -Uri $URI
 }
-#>
+
 function Get-PlexListLibraryContent ($hostname, $Token, $LibraryName)
 {
 	$Section = Get-PlexSectionKey -hostname $hostname -Token $Token -LibraryName $LibraryName
